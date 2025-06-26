@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink Cinema - Film Catalog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff69b4;
+            --primary-dark: #d45091;
+            --primary-light: #ffb6c1;
+            --text-color: #333;
+            --bg-color: #fff5f7;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background-color: var(--primary-dark);
+                padding: 1rem;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+        }
+
+        .search-container {
+            padding: 1rem;
+            background-color: white;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f1f1f1;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 0.5rem;
+        }
+
+        .search-bar button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .genre-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-code {
+            font-weight: bold;
+            background-color: white;
+            color: var(--primary-dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .age-rating {
+            display: inline-block;
+            background-color: #f5a623;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .popcorn-animation {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .popcorn-box {
+            width: 40px;
+            height: 30px;
+            background-color: #f8e71c;
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .popcorn-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: popcorn 2s infinite;
+        }
+
+        @keyframes popcorn {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .hero {
+            height: 200px;
+            background: linear-gradient(rgba(255, 105, 180, 0.5), rgba(255, 105, 180, 0.3)), 
+                        url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a800aeee-41b6-469b-a736-e73668fb5fd5.png') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .container {
+            padding: 0 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            margin: 1.5rem 0;
+            color: var(--primary-dark);
+        }
+
+        .movies-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .movie-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-poster {
+            height: 350px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 1rem;
+        }
+
+        .movie-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .movie-genre {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .genre-tag {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+
+        .movie-synopsis {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .movie-actors {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+        }
+        
+        .book-btn {
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .book-btn:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .showtimes {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .showtime {
+            background-color: var(--primary-light);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .movie-rating {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 50px;
+            font-weight: bold;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        
+        .star-rating {
+            color: gold;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            padding: 2rem 0 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .footer-section {
+            padding: 1rem;
+        }
+        
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section a {
+            display: block;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .movie-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .movies-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Pink Cinema</div>
+            <div class="nav-links">
+                <a href="#now-showing">Now Showing</a>
+                <a href="#coming-soon">Coming Soon</a>
+                <a href="#cinemas">Our Cinemas</a>
+                <a href="#promotions">Promotions</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <div class="search-container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for movies...">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="genre-filters">
+            <button class="filter-btn active" data-genre="all">All</button>
+            <button class="filter-btn" data-genre="action">Action</button>
+            <button class="filter-btn" data-genre="comedy">Comedy</button>
+            <button class="filter-btn" data-genre="romance">Romance</button>
+            <button class="filter-btn" data-genre="horror">Horror</button>
+            <button class="filter-btn" data-genre="sci-fi">Sci-Fi</button>
+            <button class="filter-btn" data-genre="drama">Drama</button>
+            <button class="filter-btn" data-genre="animation">Animation</button>
+        </div>
+    </div>
+
+    <div class="promo-banner">
+        <div class="promo-content">
+            <h3>Special Offer!</h3>
+            <p>Use code <span class="promo-code">PINK20</span> for 20% off</p>
+            <div class="popcorn-animation">
+                <div class="popcorn-box"></div>
+                <div class="popcorn-piece"></div>
+                <div class="popcorn-piece"></div>
+                <div class="popcorn-piece"></div>
+            </div>
+        </div>
+    </div>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Now Showing</h1>
+            <p>Book your favorite movies today</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">Popular Movies</h2>
+        <div class="movies-container">
+            <!-- Movie Card 1 -->
+            <div class="movie-card">
+                <div class="movie-rating">
+                    <span class="rating-number">8.5</span>
+                    <span class="age-rating">PG-13</span>
+                </div>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/50d0d3d5-ebcc-4f55-a858-087e355bcb10.png" alt="Romantic comedy movie poster showing a couple embracing in a park at sunset" class="movie-poster" onerror="this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7dd6e7a1-a76e-494b-9d25-1f2d8dbc174a.png?text=Poster+Not+Available'">
+                <div class="movie-info">
+                    <h3 class="movie-title">Love in Pink</h3>
+                    <div class="movie-genre">
+                        <span class="genre-tag">Romance</span>
+                        <span class="genre-tag">Comedy</span>
+                    </div>
+                    <p class="movie-synopsis">A heartwarming story about two people from different worlds who find love in the most unexpected place.</p>
+                    <p class="movie-actors">Starring: Emma Stone, Ryan Gosling</p>
+                    <button class="book-btn">Book Tickets</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 2 -->
+            <div class="movie-card">
+                <div class="movie-rating">
+                    <i class="fas fa-star star-rating"></i>
+                    <span>9.0</span>
+                    <span class="age-rating">PG-13</span>
+                </div>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d5e89481-85df-475f-9e1d-6562e27211ad.png" alt="Sci-fi action movie poster with futuristic cityscape and flying vehicles" class="movie-poster" onerror="this.src='https://placehold-co/400x600?text=Poster+Not+Available'">
+                <div class="movie-info">
+                    <h3 class="movie-title">Cyber Future</h3>
+                    <div class="movie-genre">
+                        <span class="genre-tag">Sci-Fi</span>
+                        <span class="genre-tag">Action</span>
+                        <span class="genre-tag">Adventure</span>
+                    </div>
+                    <p class="movie-synopsis">In a dystopian future, a group of rebels fights against an oppressive AI regime controlling humanity.</p>
+                    <p class="movie-actors">Starring: Tom Hardy, Charlize Theron</p>
+                    <div class="showtimes">
+                        <span class="showtime">1:00 PM</span>
+                        <span class="showtime">4:30 PM</span>
+                        <span class="showtime">8:00 PM</span>
+                    </div>
+                    <button class="book-btn">Book Tickets</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 3 -->
+            <div class="movie-card">
+                <div class="movie-rating">8.7</div>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/dab00d46-b1a9-4590-9158-b98d68ed60f5.png" alt="Horror movie poster showing a haunted house with eerie glowing windows" class="movie-poster" onerror="this.src='https://placehold-co/400x600?text=Poster+Not+Available'">
+                <div class="movie-info">
+                    <h3 class="movie-title">The Haunting</h3>
+                    <div class="movie-genre">
+                        <span class="genre-tag">Horror</span>
+                        <span class="genre-tag">Thriller</span>
+                        <span class="genre-tag">Mystery</span>
+                    </div>
+                    <p class="movie-synopsis">A family moves into their dream home, only to discover it has a terrifying secret and a haunting past.</p>
+                    <p class="movie-actors">Starring: Vera Farmiga, Patrick Wilson</p>
+                </div>
+            </div>
+
+            <!-- Movie Card 4 -->
+            <div class="movie-card">
+                <div class="movie-rating">8.2</div>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c6798c4d-b991-4cb1-86ae-76c9b51a9f5b.png" alt="Animated family movie poster with colorful animal characters in a jungle" class="movie-poster" onerror="this.src='https://placehold-co/400x600?text=Poster+Not+Available'">
+                <div class="movie-info">
+                    <h3 class="movie-title">Jungle Friends</h3>
+                    <div class="movie-genre">
+                        <span class="genre-tag">Animation</span>
+                        <span class="genre-tag">Adventure</span>
+                        <span class="genre-tag">Family</span>
+                    </div>
+                    <p class="movie-synopsis">Join the fun adventures of a group of unlikely animal friends as they work together to save their jungle home.</p>
+                    <p class="movie-actors">Voices by: Dwayne Johnson, Kevin Hart</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Coming Soon</h2>
+        <div class="movies-container">
+            <!-- Coming Soon Movie 1 -->
+            <div class="movie-card">
+                <div class="movie-rating">-</div>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c196e55e-cef5-4802-9fed-a45aba58df1a.png" alt="Historical drama movie poster showing medieval castle with knights" class="movie-poster" onerror="this.src='https://placehold-co/400x600?text=Poster+Not+Available'">
+                <div class="movie-info">
+                    <h3 class="movie-title">Kingdom's Fall</h3>
+                    <div class="movie-genre">
+                        <span class="genre-tag">Drama</span>
+                        <span class="genre-tag">History</span>
+                    </div>
+                    <p class="movie-synopsis">A gripping tale of power, betrayal, and redemption set during the fall of a medieval kingdom.</p>
+                    <p class="movie-actors">Starring: Cate Blanchett, Idris Elba</p>
+                </div>
+            </div>
+
+            <!-- Coming Soon Movie 2 -->
+            <div class="movie-card">
+                <div class="movie-rating">-</div>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/90359110-c70c-488a-bc7d-e0f50492b0f8.png" alt="Space exploration movie poster with astronaut floating near a spaceship" class="movie-poster" onerror="this.src='https://placehold-co/400x600?text=Poster+Not+Available'">
+                <div class="movie-info">
+                    <h3 class="movie-title">Beyond the Stars</h3>
+                    <div class="movie-genre">
+                        <span class="genre-tag">Sci-Fi</span>
+                        <span class="genre-tag">Drama</span>
+                    </div>
+                    <p class="movie-synopsis">An astronaut's solo mission turns into a fight for survival when she discovers an ancient alien artifact.</p>
+                    <p class="movie-actors">Starring: Sandra Bullock, Chiwetel Ejiofor</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">FAQs</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: info@pinkcinema.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2023 Pink Cinema. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Filter movies by genre
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const genre = this.dataset.genre;
+                const movies = document.querySelectorAll('.movie-card');
+                
+                movies.forEach(movie => {
+                    if(genre === 'all' || movie.querySelector('.movie-genre').textContent.includes(genre)) {
+                        movie.style.display = 'block';
+                    } else {
+                        movie.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const movies = document.querySelectorAll('.movie-card');
+            
+            movies.forEach(movie => {
+                const title = movie.querySelector('.movie-title').textContent.toLowerCase();
+                const synopsis = movie.querySelector('.movie-synopsis').textContent.toLowerCase();
+                
+                if(title.includes(searchTerm) || synopsis.includes(searchTerm)) {
+                    movie.style.display = 'block';
+                } else {
+                    movie.style.display = 'none';
+                }
+            });
+        });
+
+        // Add popcorn animation
+        const popcornContainer = document.querySelector('.popcorn-animation');
+        for(let i = 0; i < 5; i++) {
+            const popcorn = document.createElement('div');
+            popcorn.className = 'popcorn-piece';
+            popcorn.style.left = `${Math.random() * 30}px`;
+            popcorn.style.top = `${Math.random() * -20}px`;
+            popcorn.style.animationDelay = `${Math.random() * 2}s`;
+            popcornContainer.appendChild(popcorn);
+        }
+    </script>
+</body>
+</html>
+
