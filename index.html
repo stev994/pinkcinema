@@ -6,11 +6,10 @@
     <title>Pink Cinema - Film Catalog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        
         :root {
-            --primary-color: #ff69b4;
-            --primary-dark: #d45091;
-            --primary-light: #ffb6c1;
+            --primary-color: #ffb7c5;
+            --primary-dark: #eb96a6;
+            --primary-light: #ffdfe4;
             --text-color: #333;
             --bg-color: #fff5f7;
             --card-bg: #ffffff;
@@ -31,7 +30,7 @@
         }
 
         header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark), #fce4ed);
             color: white;
             padding: 1rem;
             box-shadow: var(--shadow);
@@ -131,12 +130,12 @@
         }
 
         .filter-btn.active {
-            background-color: var(--primary-color);
+            background-color: #e8b5ce;
             color: white;
         }
 
         .promo-banner {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color), #fce4ed);
             color: white;
             padding: 1rem;
             text-align: center;
@@ -201,7 +200,7 @@
 
         .hero {
             height: 200px;
-            background: linear-gradient(rgba(255, 105, 180, 0.5), rgba(255, 105, 180, 0.3)), 
+            background: linear-gradient(rgba(248, 200, 220, 0.5), rgba(248, 200, 220, 0.3)), 
                         url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a800aeee-41b6-469b-a736-e73668fb5fd5.png') center/cover no-repeat;
             display: flex;
             justify-content: center;
@@ -242,6 +241,7 @@
 
         .movie-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .movie-poster {
@@ -303,7 +303,7 @@
         }
         
         .book-btn:hover {
-            background-color: var(--primary-color);
+            background-color: #e8b5ce;
         }
         
         .showtimes {
@@ -339,7 +339,7 @@
         }
 
         .footer {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color), #fce4ed);
             color: white;
             padding: 2rem 0 0;
             margin-top: 3rem;
@@ -405,11 +405,11 @@
         <nav class="navbar">
             <div class="logo">Pink Cinema</div>
             <div class="nav-links">
-                <a href="#now-showing">Now Showing</a>
-                <a href="#coming-soon">Coming Soon</a>
-                <a href="#cinemas">Our Cinemas</a>
-                <a href="#promotions">Promotions</a>
-                <a href="#contact">Contact</a>
+                <a href="#now-showing" class="nav-link">Now Showing</a>
+                <a href="#coming-soon" class="nav-link">Coming Soon</a>
+                <a href="#cinemas" class="nav-link">Our Cinemas</a>
+                <a href="#promotions" class="nav-link">Promotions</a>
+                <a href="#footer" class="nav-link">Contact</a>
             </div>
             <div class="mobile-menu">
                 <i class="fas fa-bars"></i>
@@ -453,7 +453,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="now-showing">
         <h2 class="section-title">Popular Movies</h2>
         <div class="movies-container">
             <!-- Movie Card 1 -->
@@ -471,7 +471,7 @@
                     </div>
                     <p class="movie-synopsis">A heartwarming story about two people from different worlds who find love in the most unexpected place.</p>
                     <p class="movie-actors">Starring: Emma Stone, Ryan Gosling</p>
-                    <button class="book-btn">Book Tickets</button>
+                    <button class="book-btn" onclick="openBookingModal('Love in Pink')">Book Tickets</button>
                 </div>
             </div>
 
@@ -534,7 +534,7 @@
             </div>
         </div>
 
-        <h2 class="section-title">Coming Soon</h2>
+        <h2 class="section-title" id="coming-soon">Coming Soon</h2>
         <div class="movies-container">
             <!-- Coming Soon Movie 1 -->
             <div class="movie-card">
@@ -568,7 +568,7 @@
         </div>
     </div>
 
-    <footer class="footer">
+    <footer class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-section">
                 <h4>Quick Links</h4>
@@ -592,7 +592,19 @@
         </div>
     </footer>
 
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
     <script>
+        // Smooth scrolling and mobile menu
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                document.querySelector('.nav-links').style.display = 'none';
+            });
+        });
+
         // Mobile menu toggle
         document.querySelector('.mobile-menu').addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
